@@ -1,31 +1,19 @@
-name: Docker Build and Push
+name: Shared workflow using
 
 on:
   push:
     branches:
       - main
+      - develop
 
 jobs:
-  docker:
-    runs-on: ubuntu-latest
+  build-push-job:
+    uses: Bablu7011/GithubActions-workflows/.github/workflows/docker-ci.yml@v1.0.0
 
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
+    with:
+      image_name: myapp
+      tag: ${{ github.ref_name == 'main' && format('prod-{0}', github.sha) || format('staging-{0}', github.sha) }}
 
-      - name: Login to Docker Hub
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-
-      - name: Get Commit SHA
-        id: vars
-        run: echo "sha=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-
-      - name: Build Docker Image
-        run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/myapp:latest \
-                       -t ${{ secrets.DOCKER_USERNAME }}/myapp:${{ steps.vars.outputs.sha }} .
-
-      - name: Push Docker Image
-        run: |
-          docker push ${{ secrets.DOCKER_USERNAME }}/myapp:latest
-          docker push ${{ secrets.DOCKER_USERNAME }}/myapp:${{ steps.vars.outputs.sha }}
+    secrets:
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
