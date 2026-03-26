@@ -2,7 +2,7 @@
 FROM python:3.11 AS builder
 
 WORKDIR /app
-COPY app.py .
+COPY . .
 
 # prod stage
 FROM python:3.11-alpine
