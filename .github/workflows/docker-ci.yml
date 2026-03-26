@@ -8,7 +8,7 @@ on:
 
 jobs:
   build-push-job:
-    uses: Bablu7011/GithubActions-workflows/.github/workflows/docker-ci.yml@v1.0.1
+    uses: Bablu7011/GithubActions-workflows/.github/workflows/docker-ci.yml@v1.0.2
 
     with:
       image_name: myapp
