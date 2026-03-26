@@ -1,4 +1,5 @@
-Stage 1: Build stage
+#Stage 1: Build stage
+
 FROM python:3.9 AS builder
 
 WORKDIR /app
@@ -7,7 +8,7 @@ WORKDIR /app
 COPY . .
 
 
-Stage 2: Prod Stage
+#Stage 2: Prod Stage
 
 FROM python:3.9-slim
 
